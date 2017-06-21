@@ -1,0 +1,7 @@
+FLG -bin-annot
+PKG core
+
+S src/**
+S lib/**
+
+B _build/**

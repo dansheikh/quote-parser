@@ -1,0 +1,3 @@
+true: package(core)
+true: thread,debug
+true: bin_annot
