@@ -9,6 +9,15 @@ module Parser = struct
     if args = None then raise (Invalid_argument "Too few arguments; require (file) path and optional order (-r).")
     else raise (Invalid_argument "Too many arguments; only require (file) path and optional order (-r).")
 
+  let combine_array col = Array.fold_right ~f:(fun x y -> (Char.escaped x) ^ y) col ~init:""
+
+  let combine_list col = List.fold_right ~f:(fun x y -> (Char.escaped x) ^ y) col ~init:""
+
+  let extract_quantity_price col = let qty = (Array.slice col 0 5) and let price = (Array.slice col 5 12) in
+    {quantity = Int.of_string (combine_array qty); price = Float.of_string (combine_array price)}
+
+  let rec extract_quotes col idx = if idx = 60 then [] else extract_quantity_price (Array.slice col (idx - 12) idx) :: extract_quotes (Array.slice col idx (Array.length col)) (idx + 12)
+
   let rec destruct file buf window = In_channel.input_byte file |> function
     | None -> []
     | Some num -> if num = 255 then
