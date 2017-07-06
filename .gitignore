@@ -1,4 +1,5 @@
 *.byte
 *.native
+.vscode/
 _build/
 data/
